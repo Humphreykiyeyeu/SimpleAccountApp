@@ -9,7 +9,7 @@ use App\Models\Transaction;
 
 class TransactionController extends Controller
 {
-    public function dashboard(){
+    public function dashboard(Request $request){
 
         $user = auth()->user();
         $transactions = $user->Transaction;
@@ -21,37 +21,26 @@ class TransactionController extends Controller
             $total_debit = $total_debit + $trans->debit;
         }
 
-    //     if($request->input('search')){
-    //         // Get the search query from the request
-    //         $searchQuery = $request->input('search');
-
-    // // Fetch transactions based on the search query
-    //         $transactions = Transaction::where('user_id', auth()->id())
-    //         ->where(function ($query) use ($searchQuery) {
-    //             $query->where('transaction_number', 'LIKE', "%{$searchQuery}%")
-    //             ->orWhere('transaction_type', 'LIKE', "%{$searchQuery}%")
-    //               ->orWhereDate('created_at', $searchQuery); // Optionally filter by date
-    //           })
-    //     ->latest() // Order by latest
-    //     ->paginate(10); // Paginate results (optional)
-
-    // // Return the dashboard view with filtered transactions
-    //     return view('dashboard',[
-    //     'userData' => $user,
-    //     'total_debit' => $total_debit,
-    //     'total_credit' => $total_credit,
-    //     'total_balance' => $total_balance,
-    //     'transactions' => $transactions,  // Include the filtered transactions
-    //     'searchQuery' => $searchQuery,    // Pass the search query
-    // ]);
-    // }
+        if($request->has('search')) {
+            $search_query = $request->search;
+            $filtered_transactions = Transaction::where('user_id', auth()->id())
+                ->where(function($query) use ($search_query) {
+                    $query->where('transaction_number', 'LIKE', "%{$search_query}%")
+                          ->orWhere('transaction_type', 'LIKE', "%{$search_query}%")
+                          ->orWhereDate('created_at', $search_query);
+                })
+                ->latest()
+                ->get();
+        } else {
+            $filtered_transactions = null;
+        }
         
-
         return view('dashboard',[
             'userData' => $user,
             'total_debit' => $total_debit,
             'total_credit'=> $total_credit,
             'total_balance' => $total_balance,
+            'filtered_transactions' => $filtered_transactions,
         ]);
     }
 

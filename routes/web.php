@@ -14,3 +14,4 @@ Route::get('/withdraw',[TransactionController::class, 'withdraw'])->middleware('
 Route::post('/userwithdraw',[TransactionController::class, 'userwithdraw']);
 Route::get('/transfer',[TransactionController::class, 'transfer'])->middleware('auth');
 Route::post('/userTransferMoney',[TransactionController::class, 'userTransferMoney']);
+Route::get('/search', [TransactionController::class, 'dashboard'])->middleware('auth');

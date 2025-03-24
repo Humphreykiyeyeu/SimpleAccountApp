@@ -8,11 +8,7 @@
 </head>
 <body>
 
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
+
 @auth
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
@@ -31,7 +27,14 @@
     </div>
   </div>
 </nav>
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
+@endauth
 
+@auth
 {{$slot}}
 @else
 <div class="d-flex justify-content-end mb-4 mt-4 pt-4 ">

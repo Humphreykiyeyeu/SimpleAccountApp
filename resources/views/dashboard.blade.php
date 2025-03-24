@@ -3,12 +3,12 @@
 
 	<div class="container mt-4 method='GET'">
 		<!-- Search form -->
-		<!-- <div class="d-flex justify-content-center mb-4">
-			<form class="d-flex w-50" action="/">
-				<input class="form-control me-2" type="search" placeholder="Search by username" aria-label="Search" name='search'>
+		 <div class="d-flex justify-content-center mb-4">
+			<form method = 'GET' class="d-flex w-50" action="/">
+				<input class="form-control me-2" type="search" placeholder="Search by Date, account journal number or transaction type" aria-label="Search" name='search'>
 				<button class="btn btn-outline-primary" type="submit">Search</button>
 			</form>
-		</div> -->
+		</div> 
 
 		<!-- User data table -->
 		<div class="table-responsive mb-4">
@@ -34,7 +34,7 @@
 			</table>
 		</div>
 
-		<!-- Transaction table -->
+		<!-- transaction table -->
 		<div class="table-responsive">
 			<table class="table table-bordered">
 				<thead>
@@ -50,26 +50,47 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($userData->transaction->reverse() as $transaction)
-					<tr>
-						<td>{{$transaction->created_at}}</td>
-						<td>{{$transaction->transaction_number}}</td>
-						<td>{{$transaction->journal_number}}</td>
-						<td>{{$transaction->description}}</td>
-						@if($transaction->transaction_type == 'withdraw')
-							<td class="text-danger">{{$transaction->transaction_type}}</td>
-						@elseif($transaction->transaction_type == 'Deposit')
-							<td class="text-success">{{$transaction->transaction_type}}</td>
-						@else
-						<td class="text-info">{{$transaction->transaction_type}}</td>
-						@endif
-					</td>
-						<td>{{$transaction->debit}}</td>
-						<td>{{$transaction->credit}}</td>
-						<td>{{$transaction->balance}}</td>
-						
-					</tr>
-					@endforeach
+			@if($filtered_transactions)  
+                
+                @foreach($filtered_transactions->reverse() as $transaction)
+                    <tr>
+                        <td>{{ $transaction->created_at }}</td>
+                        <td>{{ $transaction->transaction_number }}</td>
+                        <td>{{ $transaction->journal_number }}</td>
+                        <td>{{ $transaction->description }}</td>
+                        @if($transaction->transaction_type == 'withdraw')
+                            <td class="text-danger">{{ $transaction->transaction_type }}</td>
+                        @elseif($transaction->transaction_type == 'Deposit')
+                            <td class="text-success">{{ $transaction->transaction_type }}</td>
+                        @else
+                            <td class="text-info">{{ $transaction->transaction_type }}</td>
+                        @endif
+                        <td>{{ $transaction->debit }}</td>
+                        <td>{{ $transaction->credit }}</td>
+                        <td>{{ $transaction->balance }}</td>
+                    </tr>
+                @endforeach
+            @else  
+                
+                @foreach($userData->transaction->reverse() as $transaction)
+                    <tr>
+                        <td>{{ $transaction->created_at }}</td>
+                        <td>{{ $transaction->transaction_number }}</td>
+                        <td>{{ $transaction->journal_number }}</td>
+                        <td>{{ $transaction->description }}</td>
+                        @if($transaction->transaction_type == 'withdraw')
+                            <td class="text-danger">{{ $transaction->transaction_type }}</td>
+                        @elseif($transaction->transaction_type == 'Deposit')
+                            <td class="text-success">{{ $transaction->transaction_type }}</td>
+                        @else
+                            <td class="text-info">{{ $transaction->transaction_type }}</td>
+                        @endif
+                        <td>{{ $transaction->debit }}</td>
+                        <td>{{ $transaction->credit }}</td>
+                        <td>{{ $transaction->balance }}</td>
+                    </tr>
+                @endforeach
+            @endif
 					
 				</tbody>
 			</table>
